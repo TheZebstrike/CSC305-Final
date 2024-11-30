@@ -19,19 +19,44 @@ public class Main extends JFrame {
         DrawAreaListener drawAreaListener = new DrawAreaListener();
         drawPanel.addMouseListener(drawAreaListener);
         drawPanel.addMouseMotionListener(drawAreaListener);
+        drawPanel.setDrawAreaListener(drawAreaListener);
         Blackboard.getInstance().addPropertyChangeListener(drawPanel);
-
-        setJMenuBar(createMenuBar());
-
+        setJMenuBar(createMenuBar(drawAreaListener));
         add(drawPanel);
     }
 
-    private JMenuBar createMenuBar() {
+    private JMenuBar createMenuBar(DrawAreaListener drawAreaListener) {
         JMenuBar menuBar = new JMenuBar();
-
         JMenu fileMenu = new JMenu("File");
         menuBar.add(fileMenu);
+        JMenu boxConnectorMenu = new JMenu("Box Connector");
+        menuBar.add(boxConnectorMenu);
 
+        String[] relationshipTypes = {
+                "Inheritance", "Association", "Aggregation",
+                "Composition", "Dependency", "Realization"
+        };
+
+        for (String type : relationshipTypes) {
+            JMenuItem menuItem = new JMenuItem(type);
+            menuItem.addActionListener(e -> {
+                drawAreaListener.setSelectedRelationshipType(type);
+                JOptionPane.showMessageDialog(this,
+                        "Relationship type '" + type + "' selected.\n" +
+                                "Now click on the source and target classes to create the relationship.",
+                        "Relationship Type Selected", JOptionPane.INFORMATION_MESSAGE);
+            });
+            boxConnectorMenu.add(menuItem);
+        }
+
+        JMenuItem cancelItem = new JMenuItem("Cancel");
+        cancelItem.addActionListener(e -> {
+            drawAreaListener.resetRelationshipSelection();
+            JOptionPane.showMessageDialog(this,
+                    "Relationship creation canceled.",
+                    "Canceled", JOptionPane.INFORMATION_MESSAGE);
+        });
+        boxConnectorMenu.add(cancelItem);
         return menuBar;
     }
 }

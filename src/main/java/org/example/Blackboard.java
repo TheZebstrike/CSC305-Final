@@ -7,6 +7,8 @@ public class Blackboard extends PropertyChangeSupport {
 
     private static Blackboard instance;
     private final ArrayList<Node> nodes = new ArrayList<>();
+    private final ArrayList<Connection> connections = new ArrayList<>();
+    private final ArrayList<ClassRelationship> classRelationships = new ArrayList<>();
 
     private Blackboard() {
         super(new Object());
@@ -30,6 +32,24 @@ public class Blackboard extends PropertyChangeSupport {
 
     public ArrayList<Node> getNodes() {
         return nodes;
+    }
+
+    public void addConnection(Connection connection) {
+        connections.add(connection);
+        firePropertyChange("connections", null, connection);
+    }
+
+    public ArrayList<Connection> getConnections() {
+        return connections;
+    }
+
+    public void addClassRelationship(ClassRelationship relationship) {
+        classRelationships.add(relationship);
+        firePropertyChange("classRelationships", null, relationship);
+    }
+
+    public ArrayList<ClassRelationship> getClassRelationships() {
+        return classRelationships;
     }
 
     public int size() {
