@@ -63,11 +63,13 @@ public class Main extends JFrame {
     private JMenuBar createMenuBar(DrawAreaListener drawAreaListener) {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
+        FileManager fileManager = new FileManager(this);
         menuBar.add(fileMenu);
 
         JMenuItem newItem = new JMenuItem("New");
         newItem.addActionListener(e -> {
             //implement New functionality
+            fileManager.handleNewFile();
         });
         fileMenu.add(newItem);
 
@@ -86,6 +88,7 @@ public class Main extends JFrame {
         JMenuItem saveAsItem = new JMenuItem("Save As");
         saveAsItem.addActionListener(e -> {
             //implement Save As functionality
+
         });
         fileMenu.add(saveAsItem);
 
