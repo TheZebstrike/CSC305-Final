@@ -35,6 +35,7 @@ public class Main extends JFrame {
 
         //left pane
         classListModel = new DefaultListModel<>();
+        Blackboard.getInstance().setClassListModel(classListModel);
         classList = new JList<>(classListModel);
         JScrollPane classListScrollPane = new JScrollPane(classList);
         splitPane.setLeftComponent(classListScrollPane);
@@ -42,6 +43,7 @@ public class Main extends JFrame {
         //right pane
         codeTextArea = new JTextArea();
         codeTextArea.setEditable(false);
+        Blackboard.getInstance().setCodeTextArea(codeTextArea);
         JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
         splitPane.setRightComponent(codeScrollPane);
 

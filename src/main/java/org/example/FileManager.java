@@ -9,11 +9,17 @@ public class FileManager {
         this.frame = f;
     }
     public void handleNewFile() {
-
+        //clear everything
+        Blackboard.getInstance().getNodes().clear();
+        Blackboard.getInstance().getClassRelationships().clear();
+        Blackboard.getInstance().getConnections().clear();
+        Blackboard.getInstance().repaint();
+        Blackboard.getInstance().getCodeTextArea().setText("");
+        Blackboard.getInstance().getClassListModel().clear();
     }
     public void handleOpenFile() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Open SVG File");
+        fileChooser.setDialogTitle("Open Diagram File");
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("SVG Files", "svg"));
 
         int userSelection = fileChooser.showOpenDialog(frame);
