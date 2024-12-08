@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.io.*;
 
 public class FileManager {
-    private JFrame frame = null;
+    private final JFrame frame;
     public FileManager(JFrame f) {
         this.frame = f;
     }
-    public void handleNewFile() {
+    public void newFile() {
         //clear everything
         Blackboard.getInstance().getNodes().clear();
         Blackboard.getInstance().getClassRelationships().clear();
@@ -28,9 +28,9 @@ public class FileManager {
             File selectedFile = fileChooser.getSelectedFile();
             try {
                 String content = readAndParseFile(selectedFile);
-
-                //Blackboard.getInstance().setFileContent(content);
+                Blackboard.getInstance().setFileContent(content);
                 Blackboard.getInstance().repaint();
+                Blackboard.getInstance().updateCodeTab();
 
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -39,38 +39,32 @@ public class FileManager {
     }
     private String readAndParseFile(File file) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
-        //Blackboard.getInstance().getShapes().clear();
+        newFile(); //reset everything
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 contentBuilder.append(line).append("\n");
-                if (line.startsWith("<circle")) {
-                    String[] lineParts = line.split(" ");
-                    int radius = Integer.parseInt(lineParts[1].substring(3,5));
-                    int cx = Integer.parseInt(lineParts[2].substring(4,lineParts[2].length()-1));
-                    int cy = Integer.parseInt(lineParts[3].substring(4,lineParts[3].length()-1));
-                    String nextLine = br.readLine();
+                if (line.startsWith("Node[") && line.endsWith("]")) {
+                    Blackboard.getInstance().getNodes().add(Node.fromString(line));
                 }
-                if (line.startsWith("<rect")) {
-                    String[] lineParts = line.split(" ");
-                    int x = Integer.parseInt(lineParts[1].substring(3,lineParts[1].length()-1));
-                    int y = Integer.parseInt(lineParts[2].substring(3,lineParts[2].length()-1));
-                    int width = Integer.parseInt(lineParts[3].substring(7,lineParts[3].length()-1));
-                    String nextLine = br.readLine();
-                    String[] nextParts = nextLine.split(" ");
+                if (line.startsWith("ClassRelationship[") && line.endsWith("]")) {
+                    Blackboard.getInstance().getClassRelationships().add(ClassRelationship.fromString(line));
+                }
+                if (line.startsWith("Connection[") && line.endsWith("]")) {
+                    Blackboard.getInstance().getConnections().add(Connection.fromString(line));
                 }
             }
         }
         return contentBuilder.toString();
     }
 
-    private void handleSaveFile() {
-        //String svgContent = Blackboard.getInstance().getFileContent();
+    public void handleSaveAs() {
+        String fileContent = Blackboard.getInstance().getFileContent();
 
         // Use JFileChooser to prompt the user to select a save location
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save SVG File");
-        fileChooser.setSelectedFile(new File("drawing.svg"));
+        fileChooser.setDialogTitle("Save Diagram File");
+        fileChooser.setSelectedFile(new File("diagram.svg"));
 
         int userSelection = fileChooser.showSaveDialog(frame);
 
@@ -83,17 +77,30 @@ public class FileManager {
             }
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
-                //writer.write(svgContent);
+                writer.write(fileContent);
                 JOptionPane.showMessageDialog(frame, "File saved successfully!");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
-    private void showHelpDialog() {
-        JOptionPane.showMessageDialog(frame, "Authors: Yud Wong + Aidan Stutz\n" + "You can open or save files when clicking File button\n" +
-                        "You can change between circles and squares, blue and red when clicking on shape and color button",
-                "Help", JOptionPane.INFORMATION_MESSAGE);
+    public void saveFile() {
+        StringBuilder diagramContent = new StringBuilder();
+        diagramContent.append("<svg\n");
+        diagramContent.append("xmlns=\"http://www.w3.org/2000/svg\"\n");
+        diagramContent.append(String.format("width=\"%d\"\n", 800));
+        diagramContent.append(String.format("height=\"%d\">\n", 600));
+        for (Node node : Blackboard.getInstance().getNodes()) {
+            diagramContent.append(node.toString()).append("\n");
+        }
+        for (ClassRelationship relationship : Blackboard.getInstance().getClassRelationships()) {
+            diagramContent.append(relationship.toString()).append("\n");
+        }
+        for (Connection connection : Blackboard.getInstance().getConnections()) {
+            diagramContent.append(connection.toString()).append("\n");
+        }
+        diagramContent.append("</svg>");
+        Blackboard.getInstance().setFileContent(diagramContent.toString());
+        JOptionPane.showMessageDialog(frame, "File saved!");
     }
 }

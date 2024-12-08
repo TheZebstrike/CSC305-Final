@@ -12,7 +12,6 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
     private Node selectedNode = null;
     private Node connectionStartNode = null;
     private String connectionStartDecoration = null;
-    private Point currentMousePosition = null;
     private Node relationshipStartNode = null;
     private String selectedRelationshipType = null;
 

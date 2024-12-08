@@ -31,10 +31,6 @@ public class Blackboard extends PropertyChangeSupport {
         firePropertyChange("nodes", null, node);
     }
 
-    public Node get(int index) {
-        return nodes.get(index);
-    }
-
     public ArrayList<Node> getNodes() {
         return nodes;
     }
@@ -64,6 +60,10 @@ public class Blackboard extends PropertyChangeSupport {
     public void repaint() {
         firePropertyChange("repaint", false, true);
     }
+    public void updateCodeTab() {
+        firePropertyChange("updateCodeTab", false, true);
+    }
+
 
     public String getFileContent() {
         return fileContent;
