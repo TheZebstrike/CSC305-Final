@@ -1,14 +1,9 @@
 package org.example;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.Map;
 
 public class Main extends JFrame {
-    private JTextArea codeTextArea;
-    private JList<String> classList;
-    private DefaultListModel<String> classListModel;
-    private Map<String, String> generatedCodeMap;
+    private final CodeTab codeTab = new CodeTab();
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -30,32 +25,9 @@ public class Main extends JFrame {
         Blackboard.getInstance().addPropertyChangeListener(drawPanel);
         tabbedPane.addTab("Draw Area", drawPanel);
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerLocation(200);
+        tabbedPane.addTab("Code", codeTab.getSplitPane());
+        Blackboard.getInstance().addPropertyChangeListener(codeTab);
 
-        //left pane
-        classListModel = new DefaultListModel<>();
-        classList = new JList<>(classListModel);
-        JScrollPane classListScrollPane = new JScrollPane(classList);
-        splitPane.setLeftComponent(classListScrollPane);
-
-        //right pane
-        codeTextArea = new JTextArea();
-        codeTextArea.setEditable(false);
-        JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
-        splitPane.setRightComponent(codeScrollPane);
-
-        tabbedPane.addTab("Code", splitPane);
-
-        classList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                String selectedClass = classList.getSelectedValue();
-                if (selectedClass != null && generatedCodeMap != null) {
-                    String code = generatedCodeMap.get(selectedClass);
-                    codeTextArea.setText(code);
-                }
-            }
-        });
         setJMenuBar(createMenuBar(drawAreaListener));
         add(tabbedPane);
     }
@@ -63,30 +35,23 @@ public class Main extends JFrame {
     private JMenuBar createMenuBar(DrawAreaListener drawAreaListener) {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
+        FileManager fileManager = new FileManager(this);
         menuBar.add(fileMenu);
 
         JMenuItem newItem = new JMenuItem("New");
-        newItem.addActionListener(e -> {
-            //implement New functionality
-        });
+        newItem.addActionListener(e -> fileManager.newFile());
         fileMenu.add(newItem);
 
         JMenuItem openItem = new JMenuItem("Open");
-        openItem.addActionListener(e -> {
-            //implement Open functionality
-        });
+        openItem.addActionListener(e -> fileManager.handleOpenFile());
         fileMenu.add(openItem);
 
         JMenuItem saveItem = new JMenuItem("Save");
-        saveItem.addActionListener(e -> {
-            //implement Save functionality
-        });
+        saveItem.addActionListener(e -> fileManager.saveFile());
         fileMenu.add(saveItem);
 
         JMenuItem saveAsItem = new JMenuItem("Save As");
-        saveAsItem.addActionListener(e -> {
-            //implement Save As functionality
-        });
+        saveAsItem.addActionListener(e -> fileManager.handleSaveAs());
         fileMenu.add(saveAsItem);
 
         JMenu boxConnectorMenu = new JMenu("Box Connector");
@@ -101,7 +66,7 @@ public class Main extends JFrame {
         menuBar.add(toolsMenu);
 
         JMenuItem runItem = new JMenuItem("Run");
-        runItem.addActionListener(e -> generateCode());
+        runItem.addActionListener(e -> codeTab.updateCodeTab());
         toolsMenu.add(runItem);
 
         for (String type : relationshipTypes) {
@@ -124,21 +89,17 @@ public class Main extends JFrame {
                     "Canceled", JOptionPane.INFORMATION_MESSAGE);
         });
         boxConnectorMenu.add(cancelItem);
+
+        JMenu helpMenu = new JMenu("Help");
+        JMenuItem aboutItem = new JMenuItem("About");
+        aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
+    """
+                CSC305 Final Project 2024
+                Authors: Yud Wong + Aidan Stutz
+            """));
+        helpMenu.add(aboutItem);
+        menuBar.add(helpMenu);
+
         return menuBar;
-    }
-
-    private void generateCode() {
-        CodeGenerator codeGenerator = new CodeGenerator();
-        generatedCodeMap = codeGenerator.generateCode(); // Now returns a Map
-
-        classListModel.clear();
-        for (String className : generatedCodeMap.keySet()) {
-            classListModel.addElement(className);
-        }
-        codeTextArea.setText("");
-
-        if (!classListModel.isEmpty()) {
-            classList.setSelectedIndex(0);
-        }
     }
 }

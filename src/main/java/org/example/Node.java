@@ -2,8 +2,10 @@ package org.example;
 
 import java.awt.*;
 import java.awt.Rectangle;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 
 public class Node {
 
@@ -132,6 +134,67 @@ public class Node {
 
     public Rectangle getBounds() {
         return bounds;
+    }
+    // Convert Node to a String
+    @Override
+    public String toString() {
+        StringJoiner decorationJoiner = new StringJoiner(",");
+        for (String decoration : decorations) {
+            decorationJoiner.add(decoration);
+        }
+
+        return String.format(
+                "Node[label=%s,x=%d,y=%d,decorations=%s]",
+                label,
+                bounds.x + bounds.width / 2,
+                bounds.y + bounds.height / 2,
+                decorationJoiner.toString()
+        );
+    }
+    // Reconstruct Node from a String
+    public static Node fromString(String serialized) {
+        String content = serialized.substring(5, serialized.length() - 1); // Remove "Node[" and "]"
+        String[] parts = content.split(",(?=[a-z]+=)"); // Split at commas with keys
+
+        String label = null;
+        int x = 0, y = 0;
+        Set<String> decorations = new HashSet<>();
+
+        for (String part : parts) {
+            String[] keyValue = part.split("=", 2);
+            if (keyValue.length < 2) {
+                throw new IllegalArgumentException("Invalid key-value pair: " + part);
+            }
+            String key = keyValue[0].trim();
+            String value = keyValue[1].trim();
+
+            switch (key) {
+                case "label":
+                    label = value;
+                    break;
+                case "x":
+                    x = Integer.parseInt(value);
+                    break;
+                case "y":
+                    y = Integer.parseInt(value);
+                    break;
+                case "decorations":
+                    if (!value.isEmpty()) {
+                        decorations.addAll(Arrays.asList(value.split(",")));
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown key: " + key);
+            }
+        }
+
+        if (label == null) {
+            throw new IllegalArgumentException("Missing label in serialized data.");
+        }
+
+        Node node = new Node(label, x, y);
+        node.decorations.addAll(decorations);
+        return node;
     }
 }
 
