@@ -14,6 +14,8 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
     private String connectionStartDecoration = null;
     private Node relationshipStartNode = null;
     private String selectedRelationshipType = null;
+    private static final int GRID_SIZE = 50;
+    private static final int SEARCH_RADIUS = 2;
 
     private Node getNodeAtPosition(int x, int y) {
         for (Node node : Blackboard.getInstance().getNodes()) {
@@ -22,6 +24,65 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
             }
         }
         return null;
+    }
+
+    private Point snapToGrid(int x, int y) {
+        int snappedX = Math.round(x / (float) GRID_SIZE) * GRID_SIZE;
+        int snappedY = Math.round(y / (float) GRID_SIZE) * GRID_SIZE;
+        return new Point(snappedX, snappedY);
+    }
+
+    private boolean isCollisionAt(Node node, int x, int y) {
+        int oldX = node.getX();
+        int oldY = node.getY();
+        node.move(x, y);
+
+        boolean collision = false;
+        for (Node other : Blackboard.getInstance().getNodes()) {
+            if (other != node && other.getBounds().intersects(node.getBounds())) {
+                collision = true;
+                break;
+            }
+        }
+        node.move(oldX, oldY);
+        return collision;
+    }
+
+    private Point findNearestOpenCell(Node node, int startX, int startY) {
+        if (!isCollisionAt(node, startX, startY)) {
+            return new Point(startX, startY);
+        }
+
+        for (int r = 1; r <= SEARCH_RADIUS; r++) {
+            for (int dx = 0; dx <= r; dx++) {
+                for (int dy = 0; dy <= r; dy++) {
+                    int candidateX = startX + dx * GRID_SIZE;
+                    int candidateY = startY + dy * GRID_SIZE;
+                    if (dx == 0 && dy == 0) continue;
+                    if (!isCollisionAt(node, candidateX, candidateY)) {
+                        return new Point(candidateX, candidateY);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private void placeNodeSafely(Node node, int rawX, int rawY) {
+        Point snapped = snapToGrid(rawX, rawY);
+        if (!isCollisionAt(node, snapped.x, snapped.y)) {
+            node.move(snapped.x, snapped.y);
+        } else {
+            Point openCell = findNearestOpenCell(node, snapped.x, snapped.y);
+            if (openCell != null) {
+                node.move(openCell.x, openCell.y);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Cannot place the box here. It overlaps with another box and no open spot was found nearby.",
+                        "Collision Detected", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        Blackboard.getInstance().repaint();
     }
 
     @Override
@@ -61,7 +122,7 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
                     String name = "Name" + String.format("%02d", Blackboard.getInstance().size() + 1);
                     Node newNode = new Node(name, e.getX(), e.getY());
                     Blackboard.getInstance().add(newNode);
-                    Blackboard.getInstance().repaint();
+                    placeNodeSafely(newNode, e.getX(), e.getY());
                 }
             }
         }
@@ -113,6 +174,7 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
             Blackboard.getInstance().repaint();
         }
     }
+
     private void handleNameChange(MouseEvent e, Node node) {
         String currentName = node.getLabel();
         String newName = (String) JOptionPane.showInputDialog(e.getComponent(),
@@ -174,19 +236,8 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
         if (selectedNode != null && SwingUtilities.isLeftMouseButton(e)) {
             int newX = e.getX() - offsetX;
             int newY = e.getY() - offsetY;
-            Rectangle newBounds = new Rectangle(newX, newY, selectedNode.getWidth(), selectedNode.getHeight());
-            boolean collision = false;
-
-            for (Node node : Blackboard.getInstance().getNodes()) {
-                if (node != selectedNode && node.getBounds().intersects(newBounds)) {
-                    collision = true;
-                    break;
-                }
-            }
-            if (!collision) {
-                selectedNode.move(newX, newY);
-                Blackboard.getInstance().repaint();
-            }
+            selectedNode.move(newX, newY);
+            Blackboard.getInstance().repaint();
         }
     }
 
@@ -199,29 +250,7 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
             }
         } else if (SwingUtilities.isLeftMouseButton(e)) {
             if (selectedNode != null) {
-                int gridSize = 50;
-                int x = selectedNode.getX();
-                int y = selectedNode.getY();
-                int snappedX = Math.round(x / (float) gridSize) * gridSize;
-                int snappedY = Math.round(y / (float) gridSize) * gridSize;
-                Rectangle newBounds = new Rectangle(snappedX, snappedY, selectedNode.getWidth(), selectedNode.getHeight());
-                boolean collision = false;
-
-                for (Node node : Blackboard.getInstance().getNodes()) {
-                    if (node != selectedNode && node.getBounds().intersects(newBounds)) {
-                        collision = true;
-                        break;
-                    }
-                }
-                if (!collision) {
-                    selectedNode.move(snappedX, snappedY);
-                } else {
-                    JOptionPane.showMessageDialog(e.getComponent(),
-                            "Cannot place the box here. It overlaps with another box.",
-                            "Collision Detected", JOptionPane.WARNING_MESSAGE);
-                    //go to prev pos or snap to closest grid?
-                }
-                Blackboard.getInstance().repaint();
+                placeNodeSafely(selectedNode, selectedNode.getX(), selectedNode.getY());
                 selectedNode = null;
             }
         }
