@@ -47,7 +47,7 @@ public class Main extends JFrame {
         fileMenu.add(openItem);
 
         JMenuItem saveItem = new JMenuItem("Save");
-        saveItem.addActionListener(e -> fileManager.saveFile());
+        saveItem.addActionListener(e -> fileManager.handleSave());
         fileMenu.add(saveItem);
 
         JMenuItem saveAsItem = new JMenuItem("Save As");
