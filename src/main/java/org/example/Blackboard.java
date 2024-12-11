@@ -59,15 +59,12 @@ public class Blackboard extends PropertyChangeSupport {
     public String getFileContent() {
         return fileContent;
     }
-
     public void setFileContent(String fileContent) {
         this.fileContent = fileContent;
     }
-
     public JTextArea getCodeTextArea() {
         return codeTextArea;
     }
-
     public void setCodeTextArea(JTextArea codeTextArea) {
         this.codeTextArea = codeTextArea;
     }
