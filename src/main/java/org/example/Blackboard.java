@@ -13,6 +13,7 @@ public class Blackboard extends PropertyChangeSupport {
     private JTextArea codeTextArea;
     private DefaultListModel<String> classListModel;
     private String fileContent;
+    private String fileName = null;
 
 
     private Blackboard() {
@@ -87,6 +88,14 @@ public class Blackboard extends PropertyChangeSupport {
 
     public void setClassListModel(DefaultListModel<String> classListModel) {
         this.classListModel = classListModel;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
 

@@ -26,6 +26,7 @@ public class FileManager {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
+            Blackboard.getInstance().setFileName(selectedFile.getName());
             try {
                 String content = readAndParseFile(selectedFile);
                 Blackboard.getInstance().setFileContent(content);
@@ -65,7 +66,11 @@ public class FileManager {
         // Use JFileChooser to prompt the user to select a save location
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save Diagram File");
-        fileChooser.setSelectedFile(new File("diagram.svg"));
+        if (Blackboard.getInstance().getFileName() != null) {
+            fileChooser.setSelectedFile(new File(Blackboard.getInstance().getFileName()));
+        } else {
+            fileChooser.setSelectedFile(new File("diagram.svg"));
+        }
 
         int userSelection = fileChooser.showSaveDialog(frame);
 
@@ -102,6 +107,6 @@ public class FileManager {
         }
         diagramContent.append("</svg>");
         Blackboard.getInstance().setFileContent(diagramContent.toString());
-        JOptionPane.showMessageDialog(frame, "File saved!");
+        JOptionPane.showMessageDialog(frame, "File content updated!");
     }
 }
