@@ -57,6 +57,9 @@ public class CodeGenerator {
             }
         }
         classCode.append(" {\n");
+        //top level variables and constructor
+        classCode.append(getGlobalVariablesCode(node));
+        classCode.append(getConstructorCode(node));
 
         //decorations
         for (String decoration : node.getDecorations()) {
@@ -70,12 +73,6 @@ public class CodeGenerator {
                     classCode.append("    firePropertyChange(prop name, oldVal, newVal);\n  }\n");
                     break;
                 case "Singleton":
-                    classCode.append("  private static ").append(node.getLabel()).append(" instance;\n");
-                    classCode.append("  private ").append(node.getLabel()).append(" {\n");
-                    classCode.append("""
-                                        super(new Object());
-                                      }
-                                    """);
                     classCode.append("  public static ").append(node.getLabel()).append("getInstance() {\n    ");
                     classCode.append("""
                                      if (instance == null) {
@@ -129,5 +126,63 @@ public class CodeGenerator {
             }
         }
         return interfaces;
+    }
+    private String getGlobalVariablesCode(Node node) {
+        StringBuilder classCode = new StringBuilder();
+
+        if (node.getDecorations().contains("Singleton")) {
+            classCode.append("  private static ").append(node.getLabel()).append(" instance;\n");
+        }
+
+        for (ClassRelationship relationship : Blackboard.getInstance().getClassRelationships()) {
+            if (relationship.getRelationshipType().equals("Composition") &&
+                    relationship.getFromNode() == node) {
+                classCode.append("  private ").append(relationship.getToNode().getLabel()).append(" compositionVarName;\n");
+            }
+            if (relationship.getRelationshipType().equals("Aggregation")&&
+                    relationship.getFromNode() == node) {
+                classCode.append("  private ").append(relationship.getToNode().getLabel()).append(" aggregationVarName;\n");
+            }
+        }
+        return classCode.toString();
+    }
+    private String getConstructorCode(Node node) {
+        StringBuilder classCode = new StringBuilder();
+        List<String> paramList = new ArrayList<>();
+        List<String> varList = new ArrayList<>();
+
+        String firstLine = "  public " + node.getLabel() + "(";
+        if (node.getDecorations().contains("Singleton")) {
+            firstLine = "  private " + node.getLabel() + " (";
+        }
+
+        for (ClassRelationship relationship : Blackboard.getInstance().getClassRelationships()) {
+            if (relationship.getRelationshipType().equals("Composition") &&
+                    relationship.getFromNode() == node) {
+                String varStr = "    compositionVarName = new" + relationship.getToNode().getLabel() + "(); //composition";
+                varList.add(varStr);
+            }
+            if (relationship.getRelationshipType().equals("Aggregation") &&
+                    relationship.getFromNode() == node) {
+                String param = relationship.getToNode().getLabel() + " aggrVarName";
+                String varStr = "    this.aggregationVarName = aggrVarName; //Aggregation";
+                paramList.add(param);
+                varList.add(varStr);
+            }
+        }
+
+        if (!paramList.isEmpty()) {
+            firstLine = firstLine.concat(String.join(", ", paramList));
+        }
+        firstLine = firstLine.concat(") {\n");
+        classCode.append(firstLine);
+        if (node.getDecorations().contains("Singleton")) {
+            classCode.append("    super(new Object());");
+        }
+        if (!varList.isEmpty()) {
+            classCode.append(String.join("\n", varList));
+        }
+        classCode.append("\n  }\n");
+        return classCode.toString();
     }
 }
