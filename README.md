@@ -19,3 +19,7 @@ As a user, you can create your own uml class diagram which also generates the co
 2. Press run
 
 ## 📊Metrics
+Link to metrics: [[Metrics](https://docs.google.com/document/d/1EtocuQH7aap06I-bbPusMFsF8icqM93BBEYvtZngGTI/edit?tab=t.0)].
+
+## 🎥Presentation Video
+Link to video: [[Video](https://docs.google.com/document/d/1EtocuQH7aap06I-bbPusMFsF8icqM93BBEYvtZngGTI/edit?tab=t.0)].
