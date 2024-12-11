@@ -1,10 +1,10 @@
 package org.example;
 
 public class Connection {
-    private Node fromNode;
-    private String fromDecoration;
-    private Node toNode;
-    private String toDecoration;
+    private final Node fromNode;
+    private final String fromDecoration;
+    private final Node toNode;
+    private final String toDecoration;
 
     public Connection(Node fromNode, String fromDecoration, Node toNode, String toDecoration) {
         this.fromNode = fromNode;
@@ -27,6 +27,60 @@ public class Connection {
 
     public String getToDecoration() {
         return toDecoration;
+    }
+    // Convert ClassRelationship to a String
+    @Override
+    public String toString() {
+        return String.format(
+                "Connection[fromNode=%s,toNode=%s,fromDecoration=%s,toDecoration=%s]",
+                fromNode.toString(),
+                toNode.toString(),
+                fromDecoration,
+                toDecoration
+        );
+    }
+
+    // Reconstruct ClassRelationship from a String
+    public static Connection fromString(String serialized) {
+        String content = serialized.substring(12, serialized.length() - 1); // Remove "Connection[" and "]"
+        String[] parts = content.split(",(?=(fromNode|toNode|fromDecoration|toDecoration)=)"); // Split at commas with keys
+
+        Node fromNode = null;
+        Node toNode = null;
+        String fromDecoration = null;
+        String toDecoration = null;
+
+        for (String part : parts) {
+            String[] keyValue = part.split("=", 2);
+            if (keyValue.length < 2) {
+                throw new IllegalArgumentException("Invalid key-value pair: " + part);
+            }
+            String key = keyValue[0].trim();
+            String value = keyValue[1].trim();
+
+            switch (key) {
+                case "fromNode":
+                    fromNode = Node.fromString(value);
+                    break;
+                case "toNode":
+                    toNode = Node.fromString(value);
+                    break;
+                case "fromDecoration":
+                    fromDecoration = value;
+                    break;
+                case "toDecoration":
+                    toDecoration = value;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown key: " + key);
+            }
+        }
+
+        if (fromNode == null || toNode == null || fromDecoration == null || toDecoration == null) {
+            throw new IllegalArgumentException("Missing required fields in serialized data.");
+        }
+
+        return new Connection(fromNode, fromDecoration, toNode, toDecoration);
     }
 }
 

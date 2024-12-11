@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.swing.*;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
@@ -9,6 +10,10 @@ public class Blackboard extends PropertyChangeSupport {
     private final ArrayList<Node> nodes = new ArrayList<>();
     private final ArrayList<Connection> connections = new ArrayList<>();
     private final ArrayList<ClassRelationship> classRelationships = new ArrayList<>();
+    private JTextArea codeTextArea;
+    private DefaultListModel<String> classListModel;
+    private String fileContent;
+
 
     private Blackboard() {
         super(new Object());
@@ -24,10 +29,6 @@ public class Blackboard extends PropertyChangeSupport {
     public void add(Node node) {
         nodes.add(node);
         firePropertyChange("nodes", null, node);
-    }
-
-    public Node get(int index) {
-        return nodes.get(index);
     }
 
     public ArrayList<Node> getNodes() {
@@ -58,6 +59,34 @@ public class Blackboard extends PropertyChangeSupport {
 
     public void repaint() {
         firePropertyChange("repaint", false, true);
+    }
+    public void updateCodeTab() {
+        firePropertyChange("updateCodeTab", false, true);
+    }
+
+
+    public String getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(String fileContent) {
+        this.fileContent = fileContent;
+    }
+
+    public JTextArea getCodeTextArea() {
+        return codeTextArea;
+    }
+
+    public void setCodeTextArea(JTextArea codeTextArea) {
+        this.codeTextArea = codeTextArea;
+    }
+
+    public DefaultListModel<String> getClassListModel() {
+        return classListModel;
+    }
+
+    public void setClassListModel(DefaultListModel<String> classListModel) {
+        this.classListModel = classListModel;
     }
 }
 
