@@ -103,7 +103,7 @@ public class FileManager {
             }
         }
     }
-    public void updateFile() {
+    private void updateFile() {
         StringBuilder diagramContent = new StringBuilder();
         diagramContent.append("<svg\n");
         diagramContent.append("xmlns=\"http://www.w3.org/2000/svg\"\n");
