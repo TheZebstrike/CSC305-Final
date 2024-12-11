@@ -67,8 +67,6 @@ public class ClassRelationship {
         if (fromNode == null || toNode == null || relationshipType == null) {
             throw new IllegalArgumentException("Missing required fields in serialized data.");
         }
-
         return new ClassRelationship(fromNode, toNode, relationshipType);
     }
-
 }
