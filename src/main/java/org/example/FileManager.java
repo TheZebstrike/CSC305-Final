@@ -59,6 +59,7 @@ public class FileManager {
     }
 
     public void handleSaveAs() {
+        saveFile();
         String fileContent = Blackboard.getInstance().getFileContent();
 
         // Use JFileChooser to prompt the user to select a save location
