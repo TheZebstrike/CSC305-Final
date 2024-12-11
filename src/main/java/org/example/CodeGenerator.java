@@ -39,7 +39,7 @@ public class CodeGenerator {
 
         //decorations
         for (String decoration : node.getDecorations()) {
-            classCode.append("    // ").append(decoration).append("\n");
+            classCode.append(" // ").append(decoration).append("\n");
         }
 
         classCode.append("}");
