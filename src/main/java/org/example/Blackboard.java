@@ -2,6 +2,7 @@ package org.example;
 
 import javax.swing.*;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Blackboard extends PropertyChangeSupport {
@@ -13,7 +14,7 @@ public class Blackboard extends PropertyChangeSupport {
     private JTextArea codeTextArea;
     private DefaultListModel<String> classListModel;
     private String fileContent;
-    private String fileName = null;
+    private File file = null;
 
 
     private Blackboard() {
@@ -90,12 +91,12 @@ public class Blackboard extends PropertyChangeSupport {
         this.classListModel = classListModel;
     }
 
-    public String getFileName() {
-        return fileName;
+    public File getFile() {
+        return file;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFile(File file) {
+        this.file = file;
     }
 }
 

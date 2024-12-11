@@ -102,7 +102,9 @@ public class CodeGenerator {
                     break;
             }
         }
-
+        //methods
+        String methodCode = getMethodCode(node);
+        classCode.append(methodCode);
         classCode.append("}");
         return classCode.toString();
     }
@@ -183,6 +185,17 @@ public class CodeGenerator {
             classCode.append(String.join("\n", varList));
         }
         classCode.append("\n  }\n");
+        return classCode.toString();
+    }
+    private String getMethodCode(Node node) {
+        StringBuilder classCode = new StringBuilder();
+        for (ClassRelationship relationship : Blackboard.getInstance().getClassRelationships()) {
+            if (relationship.getRelationshipType().equals("Association") &&
+                    relationship.getFromNode().getLabel().equals(node.getLabel())) {
+                classCode.append("  public void method(").append(relationship.getToNode().getLabel()).append(" varName) {\n");
+                classCode.append("    ").append(node.getLabel()).append(".method(varName);\n  }\n");
+            }
+        }
         return classCode.toString();
     }
 }

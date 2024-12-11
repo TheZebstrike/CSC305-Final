@@ -26,7 +26,7 @@ public class FileManager {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            Blackboard.getInstance().setFileName(selectedFile.getName());
+            Blackboard.getInstance().setFile(selectedFile);
             try {
                 String content = readAndParseFile(selectedFile);
                 Blackboard.getInstance().setFileContent(content);
@@ -58,16 +58,29 @@ public class FileManager {
         }
         return contentBuilder.toString();
     }
-
+    public void handleSave() {
+        updateFile();
+        File fileToSave = Blackboard.getInstance().getFile();
+        if (fileToSave != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
+                writer.write(Blackboard.getInstance().getFileContent());
+                JOptionPane.showMessageDialog(frame, "File saved successfully!");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            handleSaveAs();
+        }
+    }
     public void handleSaveAs() {
-        saveFile();
+        updateFile();
         String fileContent = Blackboard.getInstance().getFileContent();
 
         // Use JFileChooser to prompt the user to select a save location
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save Diagram File");
-        if (Blackboard.getInstance().getFileName() != null) {
-            fileChooser.setSelectedFile(new File(Blackboard.getInstance().getFileName()));
+        if (Blackboard.getInstance().getFile() != null) {
+            fileChooser.setSelectedFile(new File(Blackboard.getInstance().getFile().getName()));
         } else {
             fileChooser.setSelectedFile(new File("diagram.svg"));
         }
@@ -90,7 +103,7 @@ public class FileManager {
             }
         }
     }
-    public void saveFile() {
+    public void updateFile() {
         StringBuilder diagramContent = new StringBuilder();
         diagramContent.append("<svg\n");
         diagramContent.append("xmlns=\"http://www.w3.org/2000/svg\"\n");
@@ -107,6 +120,5 @@ public class FileManager {
         }
         diagramContent.append("</svg>");
         Blackboard.getInstance().setFileContent(diagramContent.toString());
-        JOptionPane.showMessageDialog(frame, "File content updated!");
     }
 }
