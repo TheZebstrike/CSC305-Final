@@ -10,16 +10,13 @@ public class CodeGenerator {
             String classCode = generateClassCode(node);
             codeMap.put(node.getLabel(), classCode);
         }
-
         return codeMap;
     }
 
     private String generateClassCode(Node node) {
         StringBuilder classCode = new StringBuilder();
-
         classCode.append("public class ").append(node.getLabel());
 
-        //inheritance
         String parentClass = getParentClass(node);
         if (parentClass != null) {
             classCode.append(" extends ").append(parentClass);
@@ -34,7 +31,6 @@ public class CodeGenerator {
             classCode.append(" extends Creator");
         }
 
-        //interfaces
         Set<String> interfaces = getImplementedInterfaces(node);
         if (!interfaces.isEmpty() || node.getDecorations().contains("Observer")
                 || node.getDecorations().contains("Product") || node.getDecorations().contains("Strategy")) {
@@ -57,11 +53,9 @@ public class CodeGenerator {
             }
         }
         classCode.append(" {\n");
-        //top level variables and constructor
         classCode.append(getGlobalVariablesCode(node));
         classCode.append(getConstructorCode(node));
 
-        //decorations
         for (String decoration : node.getDecorations()) {
             switch (decoration) {
                 case "Observer":
@@ -102,7 +96,6 @@ public class CodeGenerator {
                     break;
             }
         }
-        //methods
         String methodCode = getMethodCode(node);
         classCode.append(methodCode);
         classCode.append("}");

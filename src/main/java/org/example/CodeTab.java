@@ -18,15 +18,14 @@ public class CodeTab implements PropertyChangeListener {
         splitPane.setDividerLocation(200);
 
         classListModel = new DefaultListModel<>();
-        Blackboard.getInstance().setClassListModel(classListModel);
+        classList = new JList<>(classListModel);
 
         codeTextArea = new JTextArea();
         codeTextArea.setEditable(false);
-        Blackboard.getInstance().setCodeTextArea(codeTextArea);
-        JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
 
-        classList = new JList<>(classListModel);
+        JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
         JScrollPane classListScrollPane = new JScrollPane(classList);
+
         classList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 String selectedClass = classList.getSelectedValue();
@@ -36,7 +35,6 @@ public class CodeTab implements PropertyChangeListener {
                 }
             }
         });
-
         splitPane.setLeftComponent(classListScrollPane);
         splitPane.setRightComponent(codeScrollPane);
     }
@@ -44,11 +42,12 @@ public class CodeTab implements PropertyChangeListener {
     public JSplitPane getSplitPane() {
         return splitPane;
     }
+
     public void updateCodeTab() {
         CodeGenerator codeGenerator = new CodeGenerator();
-        generatedCodeMap = codeGenerator.generateCode(); // Now returns a Map
-
+        generatedCodeMap = codeGenerator.generateCode();
         classListModel.clear();
+
         for (String className : generatedCodeMap.keySet()) {
             classListModel.addElement(className);
         }
@@ -60,7 +59,5 @@ public class CodeTab implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        updateCodeTab();
-    }
+    public void propertyChange(PropertyChangeEvent evt) {}
 }

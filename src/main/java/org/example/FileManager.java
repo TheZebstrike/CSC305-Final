@@ -5,23 +5,21 @@ import java.io.*;
 
 public class FileManager {
     private final JFrame frame;
+
     public FileManager(JFrame f) {
         this.frame = f;
     }
+
     public void newFile() {
-        //clear everything
         Blackboard.getInstance().getNodes().clear();
         Blackboard.getInstance().getClassRelationships().clear();
         Blackboard.getInstance().getConnections().clear();
         Blackboard.getInstance().repaint();
-        Blackboard.getInstance().getCodeTextArea().setText("");
-        Blackboard.getInstance().getClassListModel().clear();
     }
     public void handleOpenFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Open Diagram File");
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("SVG Files", "svg"));
-
         int userSelection = fileChooser.showOpenDialog(frame);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
@@ -31,8 +29,6 @@ public class FileManager {
                 String content = readAndParseFile(selectedFile);
                 Blackboard.getInstance().setFileContent(content);
                 Blackboard.getInstance().repaint();
-                Blackboard.getInstance().updateCodeTab();
-
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(frame, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -40,7 +36,7 @@ public class FileManager {
     }
     private String readAndParseFile(File file) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
-        newFile(); //reset everything
+        newFile();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -76,7 +72,6 @@ public class FileManager {
         updateFile();
         String fileContent = Blackboard.getInstance().getFileContent();
 
-        // Use JFileChooser to prompt the user to select a save location
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save Diagram File");
         if (Blackboard.getInstance().getFile() != null) {
@@ -86,11 +81,9 @@ public class FileManager {
         }
 
         int userSelection = fileChooser.showSaveDialog(frame);
-
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
 
-            // Ensure the file ends with .svg extension
             if (!fileToSave.getName().toLowerCase().endsWith(".svg")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".svg");
             }

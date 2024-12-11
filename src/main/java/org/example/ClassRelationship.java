@@ -34,15 +34,15 @@ public class ClassRelationship {
     }
 
     public static ClassRelationship fromString(String serialized) {
-        String content = serialized.substring("ClassRelationship[".length(), serialized.length() - 1);  // Remove "ClassRelationship[" and "]"
-        String[] parts = content.split(",(?=(fromNode|toNode|relationshipType)=)"); //split by comma and key names
+        String content = serialized.substring("ClassRelationship[".length(), serialized.length() - 1);
+        String[] parts = content.split(",(?=(fromNode|toNode|relationshipType)=)");
 
         Node fromNode = null;
         Node toNode = null;
         String relationshipType = null;
 
         for (String part : parts) {
-            String[] keyValue = part.split("=", 2); // Split content into this format: "key=value"
+            String[] keyValue = part.split("=", 2);
             if (keyValue.length < 2) {
                 throw new IllegalArgumentException("Invalid key-value pair: " + part);
             }

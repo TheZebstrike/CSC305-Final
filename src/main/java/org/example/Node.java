@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 public class Node {
-
     private final Rectangle bounds;
     private String label;
     private static final int DEFAULT_SIZE = 50;
@@ -41,7 +40,6 @@ public class Node {
         FontMetrics fm = g.getFontMetrics();
         int labelWidth = fm.stringWidth(label);
         g.drawString(label, x + (size - labelWidth) / 2, y + 15);
-
         int decoY = y + 30;
         g.setFont(new Font("Arial", Font.PLAIN, 10));
 
@@ -134,7 +132,7 @@ public class Node {
     public Rectangle getBounds() {
         return bounds;
     }
-    // Convert Node to a String
+
     @Override
     public String toString() {
         StringJoiner decorationJoiner = new StringJoiner(",");
@@ -150,10 +148,10 @@ public class Node {
                 decorationJoiner.toString()
         );
     }
-    // Reconstruct Node from a String
+
     public static Node fromString(String serialized) {
-        String content = serialized.substring(5, serialized.length() - 1); // Remove "Node[" and "]"
-        String[] parts = content.split(",(?=[a-z]+=)"); // Split at commas with keys
+        String content = serialized.substring(5, serialized.length() - 1);
+        String[] parts = content.split(",(?=[a-z]+=)");
 
         String label = null;
         int x = 0, y = 0;

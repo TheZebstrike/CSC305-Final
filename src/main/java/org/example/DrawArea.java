@@ -16,10 +16,9 @@ public class DrawArea extends JPanel implements PropertyChangeListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        //grid lines
         int gridSize = 50;
         g.setColor(new Color(220, 220, 220));
+
         for (int i = gridSize / 2; i < getWidth(); i += gridSize) {
             g.drawLine(i, 0, i, getHeight());
         }
@@ -27,14 +26,12 @@ public class DrawArea extends JPanel implements PropertyChangeListener {
             g.drawLine(0, i, getWidth(), i);
         }
 
-        //nodes
         for (Node node : Blackboard.getInstance().getNodes()) {
             node.draw(g);
         }
 
-        //connections
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.BLACK); // Set the color for connections
+        g2.setColor(Color.BLACK);
 
         for (Connection connection : Blackboard.getInstance().getConnections()) {
             drawCurvedLine(g2, connection);
@@ -52,14 +49,12 @@ public class DrawArea extends JPanel implements PropertyChangeListener {
         Point toPoint = toNode.getDecorationPosition(connection.getToDecoration());
 
         if (fromPoint == null || toPoint == null) {
-            //don't draw connections for deleted decorations
             return;
         }
 
         int ctrlX = (fromPoint.x + toPoint.x) / 2;
         int ctrlY = Math.min(fromPoint.y, toPoint.y) - 50;
 
-        //QuadCurve2D for curved line
         QuadCurve2D q = new QuadCurve2D.Float();
         q.setCurve(fromPoint.x, fromPoint.y, ctrlX, ctrlY, toPoint.x, toPoint.y);
         g2.draw(q);
@@ -80,12 +75,10 @@ public class DrawArea extends JPanel implements PropertyChangeListener {
 
         int midX = (fromPoint.x + toPoint.x) / 2;
         int midY = (fromPoint.y + toPoint.y) / 2;
-
         int textOffset = 10;
 
         g2.setFont(new Font("Arial", Font.PLAIN, 12));
         g2.setColor(Color.BLUE);
-
         g2.drawString(relationshipType, midX + textOffset, midY - textOffset);
     }
 

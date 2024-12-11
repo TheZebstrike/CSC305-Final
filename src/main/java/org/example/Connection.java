@@ -28,7 +28,7 @@ public class Connection {
     public String getToDecoration() {
         return toDecoration;
     }
-    // Convert ClassRelationship to a String
+
     @Override
     public String toString() {
         return String.format(
@@ -40,10 +40,9 @@ public class Connection {
         );
     }
 
-    // Reconstruct ClassRelationship from a String
     public static Connection fromString(String serialized) {
-        String content = serialized.substring(12, serialized.length() - 1); // Remove "Connection[" and "]"
-        String[] parts = content.split(",(?=(fromNode|toNode|fromDecoration|toDecoration)=)"); // Split at commas with keys
+        String content = serialized.substring(12, serialized.length() - 1);
+        String[] parts = content.split(",(?=(fromNode|toNode|fromDecoration|toDecoration)=)");
 
         Node fromNode = null;
         Node toNode = null;
