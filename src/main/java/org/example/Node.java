@@ -68,11 +68,10 @@ public class Node {
 
         int decoY = y + 30;
         int decorationHeight = 15;
-        int decorationWidth = size;
 
         for (String deco : decorations) {
             if (deco.equals(decoration)) {
-                int decoX = x + decorationWidth / 2;
+                int decoX = x + size / 2;
                 int decoCenterY = decoY - decorationHeight / 2;
                 return new Point(decoX, decoCenterY);
             }
