@@ -22,4 +22,4 @@ As a user, you can create your own uml class diagram which also generates the co
 Link to metrics: [[Metrics](https://docs.google.com/document/d/1EtocuQH7aap06I-bbPusMFsF8icqM93BBEYvtZngGTI/edit?tab=t.0)].
 
 ## 🎥Presentation Video
-Link to video: [[Video](https://docs.google.com/document/d/1EtocuQH7aap06I-bbPusMFsF8icqM93BBEYvtZngGTI/edit?tab=t.0)].
+Link to video: [[Video](https://cpslo-my.sharepoint.com/:v:/g/personal/ywong21_calpoly_edu/EZnBNO4OCMZOr4gMOanh7BkB2ZAINZGgR_O5uJo3D5Zl7w?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iTibWi)].
