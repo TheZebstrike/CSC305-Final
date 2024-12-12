@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Arrays;
+
 public class Connection {
     private final Node fromNode;
     private final String fromDecoration;
@@ -41,8 +43,11 @@ public class Connection {
     }
 
     public static Connection fromString(String serialized) {
-        String content = serialized.substring(12, serialized.length() - 1);
+        String content = serialized.substring(11, serialized.length() - 1);
+        System.out.println(serialized);
+        System.out.println(content);
         String[] parts = content.split(",(?=(fromNode|toNode|fromDecoration|toDecoration)=)");
+        System.out.println("Parts: " + Arrays.toString(parts));
 
         Node fromNode = null;
         Node toNode = null;
