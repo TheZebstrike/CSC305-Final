@@ -12,7 +12,7 @@ As a user, you can create your own uml class diagram which also generates the co
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/TheZebstrike/CSC305-Final
 
 ## 🤔Running the program
 1. Go to the file org/example/Main.java
