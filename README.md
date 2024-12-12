@@ -1,4 +1,4 @@
-# CSC305 Final Projecy
+# CSC305 Final Project
 
 As a user, you can create your own uml class diagram which also generates the code for each class with it's inherited class, implemented interfaces, variables, constructor, and methods based on its relationships and decorations. 
 
