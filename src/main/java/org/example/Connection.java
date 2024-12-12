@@ -1,53 +1,48 @@
 package org.example;
 
-import java.util.Arrays;
-
 public class Connection {
-    private final Node fromNode;
-    private final String fromDecoration;
-    private final Node toNode;
-    private final String toDecoration;
+    private final Node FROM_NODE;
+    private final String FROM_DECORATION;
+    private final Node TO_NODE;
+    private final String TO_DECORATION;
 
     public Connection(Node fromNode, String fromDecoration, Node toNode, String toDecoration) {
-        this.fromNode = fromNode;
-        this.fromDecoration = fromDecoration;
-        this.toNode = toNode;
-        this.toDecoration = toDecoration;
+        this.FROM_NODE = fromNode;
+        this.FROM_DECORATION = fromDecoration;
+        this.TO_NODE = toNode;
+        this.TO_DECORATION = toDecoration;
     }
 
     public Node getFromNode() {
-        return fromNode;
+        return FROM_NODE;
     }
 
     public String getFromDecoration() {
-        return fromDecoration;
+        return FROM_DECORATION;
     }
 
     public Node getToNode() {
-        return toNode;
+        return TO_NODE;
     }
 
     public String getToDecoration() {
-        return toDecoration;
+        return TO_DECORATION;
     }
 
     @Override
     public String toString() {
         return String.format(
                 "Connection[fromNode=%s,toNode=%s,fromDecoration=%s,toDecoration=%s]",
-                fromNode.toString(),
-                toNode.toString(),
-                fromDecoration,
-                toDecoration
+                FROM_NODE.toString(),
+                TO_NODE.toString(),
+                FROM_DECORATION,
+                TO_DECORATION
         );
     }
 
     public static Connection fromString(String serialized) {
         String content = serialized.substring(11, serialized.length() - 1);
-        System.out.println(serialized);
-        System.out.println(content);
         String[] parts = content.split(",(?=(fromNode|toNode|fromDecoration|toDecoration)=)");
-        System.out.println("Parts: " + Arrays.toString(parts));
 
         Node fromNode = null;
         Node toNode = null;

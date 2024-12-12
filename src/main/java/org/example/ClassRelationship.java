@@ -1,42 +1,41 @@
 package org.example;
 
 public class ClassRelationship {
-    private final Node fromNode;
-    private final Node toNode;
-    private final String relationshipType;
+    private final Node FROM_NODE;
+    private final Node TO_NODE;
+    private final String RELATIONSHIP_TYPE;
 
     public ClassRelationship(Node fromNode, Node toNode, String relationshipType) {
-        this.fromNode = fromNode;
-        this.toNode = toNode;
-        this.relationshipType = relationshipType;
+        this.FROM_NODE = fromNode;
+        this.TO_NODE = toNode;
+        this.RELATIONSHIP_TYPE = relationshipType;
     }
 
     public Node getFromNode() {
-        return fromNode;
+        return FROM_NODE;
     }
 
     public Node getToNode() {
-        return toNode;
+        return TO_NODE;
     }
 
     public String getRelationshipType() {
-        return relationshipType;
+        return RELATIONSHIP_TYPE;
     }
 
     @Override
     public String toString() {
         return String.format(
                 "ClassRelationship[fromNode=%s,toNode=%s,relationshipType=%s]",
-                fromNode.toString(),
-                toNode.toString(),
-                relationshipType
+                FROM_NODE.toString(),
+                TO_NODE.toString(),
+                RELATIONSHIP_TYPE
         );
     }
 
     public static ClassRelationship fromString(String serialized) {
         String content = serialized.substring("ClassRelationship[".length(), serialized.length() - 1);
         String[] parts = content.split(",(?=(fromNode|toNode|relationshipType)=)");
-
         Node fromNode = null;
         Node toNode = null;
         String relationshipType = null;

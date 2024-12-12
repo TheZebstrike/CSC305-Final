@@ -8,28 +8,28 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 public class Node {
-    private final Rectangle bounds;
+    private final Rectangle BOUNDS;
     private String label;
     private static final int DEFAULT_SIZE = 50;
     private Set<String> decorations = new HashSet<>();
 
     public Node(String label, int x, int y) {
-        bounds = new Rectangle(x - DEFAULT_SIZE / 2, y - DEFAULT_SIZE / 2, DEFAULT_SIZE, DEFAULT_SIZE);
+        BOUNDS = new Rectangle(x - DEFAULT_SIZE / 2, y - DEFAULT_SIZE / 2, DEFAULT_SIZE, DEFAULT_SIZE);
         this.label = label;
     }
 
     public int getX() {
-        return bounds.x;
+        return BOUNDS.x;
     }
 
     public int getY() {
-        return bounds.y;
+        return BOUNDS.y;
     }
 
     public void draw(Graphics g) {
-        int x = bounds.x;
-        int y = bounds.y;
-        int size = bounds.width;
+        int x = BOUNDS.x;
+        int y = BOUNDS.y;
+        int size = BOUNDS.width;
 
         g.setColor(Color.WHITE);
         g.fillRect(x, y, size, size);
@@ -60,9 +60,9 @@ public class Node {
     }
 
     public Point getDecorationPosition(String decoration) {
-        int x = bounds.x;
-        int y = bounds.y;
-        int size = bounds.width;
+        int x = BOUNDS.x;
+        int y = BOUNDS.y;
+        int size = BOUNDS.width;
 
         int decoY = y + 30;
         int decorationHeight = 15;
@@ -79,9 +79,9 @@ public class Node {
     }
 
     public String getDecorationAtPosition(int x, int y) {
-        int nodeX = bounds.x;
-        int nodeY = bounds.y;
-        int size = bounds.width;
+        int nodeX = BOUNDS.x;
+        int nodeY = BOUNDS.y;
+        int size = BOUNDS.width;
 
         int decoY = nodeY + 30;
         int decorationHeight = 15;
@@ -101,12 +101,12 @@ public class Node {
     }
 
     public void move(int x, int y) {
-        bounds.x = x - bounds.width / 2;
-        bounds.y = y - bounds.height / 2;
+        BOUNDS.x = x - BOUNDS.width / 2;
+        BOUNDS.y = y - BOUNDS.height / 2;
     }
 
     public boolean contains(int x, int y) {
-        return bounds.contains(x, y);
+        return BOUNDS.contains(x, y);
     }
 
     public String getLabel() {
@@ -118,19 +118,19 @@ public class Node {
     }
 
     public Point center() {
-        return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+        return new Point(BOUNDS.x + BOUNDS.width / 2, BOUNDS.y + BOUNDS.height / 2);
     }
 
     public int getWidth() {
-        return bounds.width;
+        return BOUNDS.width;
     }
 
     public int getHeight() {
-        return bounds.height;
+        return BOUNDS.height;
     }
 
     public Rectangle getBounds() {
-        return bounds;
+        return BOUNDS;
     }
 
     @Override
@@ -143,8 +143,8 @@ public class Node {
         return String.format(
                 "Node[label=%s,x=%d,y=%d,decorations=%s]",
                 label,
-                bounds.x + bounds.width / 2,
-                bounds.y + bounds.height / 2,
+                BOUNDS.x + BOUNDS.width / 2,
+                BOUNDS.y + BOUNDS.height / 2,
                 decorationJoiner.toString()
         );
     }
