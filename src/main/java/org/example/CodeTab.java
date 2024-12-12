@@ -6,55 +6,55 @@ import java.beans.PropertyChangeListener;
 import java.util.Map;
 
 public class CodeTab implements PropertyChangeListener {
-    private final JSplitPane splitPane;
-    private final JTextArea codeTextArea;
-    private final DefaultListModel<String> classListModel;
-    private final JList<String> classList;
+    private final JSplitPane SPLIT_PANE;
+    private final JTextArea CODE_TEXT_AREA;
+    private final DefaultListModel<String> CLASS_LIST_MODEL;
+    private final JList<String> CLASS_LIST;
     private Map<String, String> generatedCodeMap;
 
 
     public CodeTab() {
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerLocation(200);
+        SPLIT_PANE = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        SPLIT_PANE.setDividerLocation(200);
 
-        classListModel = new DefaultListModel<>();
-        classList = new JList<>(classListModel);
+        CLASS_LIST_MODEL = new DefaultListModel<>();
+        CLASS_LIST = new JList<>(CLASS_LIST_MODEL);
 
-        codeTextArea = new JTextArea();
-        codeTextArea.setEditable(false);
+        CODE_TEXT_AREA = new JTextArea();
+        CODE_TEXT_AREA.setEditable(false);
 
-        JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
-        JScrollPane classListScrollPane = new JScrollPane(classList);
+        JScrollPane codeScrollPane = new JScrollPane(CODE_TEXT_AREA);
+        JScrollPane classListScrollPane = new JScrollPane(CLASS_LIST);
 
-        classList.addListSelectionListener(e -> {
+        CLASS_LIST.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                String selectedClass = classList.getSelectedValue();
+                String selectedClass = CLASS_LIST.getSelectedValue();
                 if (selectedClass != null) {
                     Map<String, String> codeMap = generatedCodeMap;
-                    codeTextArea.setText(codeMap != null ? codeMap.get(selectedClass) : "");
+                    CODE_TEXT_AREA.setText(codeMap != null ? codeMap.get(selectedClass) : "");
                 }
             }
         });
-        splitPane.setLeftComponent(classListScrollPane);
-        splitPane.setRightComponent(codeScrollPane);
+        SPLIT_PANE.setLeftComponent(classListScrollPane);
+        SPLIT_PANE.setRightComponent(codeScrollPane);
     }
 
     public JSplitPane getSplitPane() {
-        return splitPane;
+        return SPLIT_PANE;
     }
 
     public void updateCodeTab() {
         CodeGenerator codeGenerator = new CodeGenerator();
         generatedCodeMap = codeGenerator.generateCode();
-        classListModel.clear();
+        CLASS_LIST_MODEL.clear();
 
         for (String className : generatedCodeMap.keySet()) {
-            classListModel.addElement(className);
+            CLASS_LIST_MODEL.addElement(className);
         }
-        codeTextArea.setText("");
+        CODE_TEXT_AREA.setText("");
 
-        if (!classListModel.isEmpty()) {
-            classList.setSelectedIndex(0);
+        if (!CLASS_LIST_MODEL.isEmpty()) {
+            CLASS_LIST.setSelectedIndex(0);
         }
     }
 

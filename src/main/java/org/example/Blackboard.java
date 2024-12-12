@@ -1,15 +1,14 @@
 package org.example;
 
-import javax.swing.*;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.ArrayList;
 
 public class Blackboard extends PropertyChangeSupport {
     private static Blackboard instance;
-    private final ArrayList<Node> nodes = new ArrayList<>();
-    private final ArrayList<Connection> connections = new ArrayList<>();
-    private final ArrayList<ClassRelationship> classRelationships = new ArrayList<>();
+    private final ArrayList<Node> NODES = new ArrayList<>();
+    private final ArrayList<Connection> CONNECTIONS = new ArrayList<>();
+    private final ArrayList<ClassRelationship> CLASS_RELATIONSHIPS = new ArrayList<>();
     private String fileContent;
     private File file = null;
 
@@ -25,34 +24,34 @@ public class Blackboard extends PropertyChangeSupport {
     }
     
     public void add(Node node) {
-        nodes.add(node);
-        firePropertyChange("nodes", null, node);
+        NODES.add(node);
+        firePropertyChange("NODES", null, node);
     }
 
     public ArrayList<Node> getNodes() {
-        return nodes;
+        return NODES;
     }
 
     public void addConnection(Connection connection) {
-        connections.add(connection);
-        firePropertyChange("connections", null, connection);
+        CONNECTIONS.add(connection);
+        firePropertyChange("CONNECTIONS", null, connection);
     }
 
     public ArrayList<Connection> getConnections() {
-        return connections;
+        return CONNECTIONS;
     }
 
     public void addClassRelationship(ClassRelationship relationship) {
-        classRelationships.add(relationship);
-        firePropertyChange("classRelationships", null, relationship);
+        CLASS_RELATIONSHIPS.add(relationship);
+        firePropertyChange("CLASS_RELATIONSHIPS", null, relationship);
     }
 
     public ArrayList<ClassRelationship> getClassRelationships() {
-        return classRelationships;
+        return CLASS_RELATIONSHIPS;
     }
 
     public int size() {
-        return nodes.size();
+        return NODES.size();
     }
 
     public void repaint() {

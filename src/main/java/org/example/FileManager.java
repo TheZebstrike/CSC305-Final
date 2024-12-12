@@ -4,10 +4,10 @@ import javax.swing.*;
 import java.io.*;
 
 public class FileManager {
-    private final JFrame frame;
+    private final JFrame FRAME;
 
     public FileManager(JFrame f) {
-        this.frame = f;
+        this.FRAME = f;
     }
 
     public void newFile() {
@@ -20,7 +20,7 @@ public class FileManager {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Open Diagram File");
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("SVG Files", "svg"));
-        int userSelection = fileChooser.showOpenDialog(frame);
+        int userSelection = fileChooser.showOpenDialog(FRAME);
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
@@ -30,7 +30,7 @@ public class FileManager {
                 Blackboard.getInstance().setFileContent(content);
                 Blackboard.getInstance().repaint();
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(FRAME, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -60,9 +60,9 @@ public class FileManager {
         if (fileToSave != null) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
                 writer.write(Blackboard.getInstance().getFileContent());
-                JOptionPane.showMessageDialog(frame, "File saved successfully!");
+                JOptionPane.showMessageDialog(FRAME, "File saved successfully!");
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(FRAME, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             handleSaveAs();
@@ -80,7 +80,7 @@ public class FileManager {
             fileChooser.setSelectedFile(new File("diagram.svg"));
         }
 
-        int userSelection = fileChooser.showSaveDialog(frame);
+        int userSelection = fileChooser.showSaveDialog(FRAME);
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
 
@@ -90,9 +90,9 @@ public class FileManager {
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
                 writer.write(fileContent);
-                JOptionPane.showMessageDialog(frame, "File saved successfully!");
+                JOptionPane.showMessageDialog(FRAME, "File saved successfully!");
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(frame, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(FRAME, "Error saving file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
