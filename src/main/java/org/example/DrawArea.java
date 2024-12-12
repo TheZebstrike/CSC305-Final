@@ -88,7 +88,16 @@ public class DrawArea extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        repaint();
+        //repaint();
+        switch (evt.getPropertyName()) {
+            case "NODES":
+            case "CONNECTIONS":
+            case "CLASS_RELATIONSHIPS":
+            case "NODE_MOVED":
+            case "repaint":
+                repaint();
+                break;
+        }
     }
 }
 

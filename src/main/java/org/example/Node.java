@@ -103,6 +103,7 @@ public class Node {
     public void move(int x, int y) {
         BOUNDS.x = x - BOUNDS.width / 2;
         BOUNDS.y = y - BOUNDS.height / 2;
+        Blackboard.getInstance().firePropertyChange("NODE_MOVED", null, this);
     }
 
     public boolean contains(int x, int y) {

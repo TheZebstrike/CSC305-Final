@@ -122,6 +122,7 @@ public class CodeGenerator {
         }
         return interfaces;
     }
+
     private String getGlobalVariablesCode(Node node) {
         StringBuilder classCode = new StringBuilder();
 
@@ -141,6 +142,7 @@ public class CodeGenerator {
         }
         return classCode.toString();
     }
+
     private String getConstructorCode(Node node) {
         StringBuilder classCode = new StringBuilder();
         List<String> paramList = new ArrayList<>();
@@ -180,6 +182,7 @@ public class CodeGenerator {
         classCode.append("\n  }\n");
         return classCode.toString();
     }
+
     private String getMethodCode(Node node) {
         StringBuilder classCode = new StringBuilder();
         for (ClassRelationship relationship : Blackboard.getInstance().getClassRelationships()) {

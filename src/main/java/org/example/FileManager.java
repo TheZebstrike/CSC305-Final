@@ -2,6 +2,8 @@ package org.example;
 
 import javax.swing.*;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FileManager {
     private final JFrame FRAME;
@@ -16,6 +18,7 @@ public class FileManager {
         Blackboard.getInstance().getConnections().clear();
         Blackboard.getInstance().repaint();
     }
+
     public void handleOpenFile() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Open Diagram File");
@@ -34,26 +37,52 @@ public class FileManager {
             }
         }
     }
+
     private String readAndParseFile(File file) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
         newFile();
+        Map<String, Node> nodeMap = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 contentBuilder.append(line).append("\n");
                 if (line.startsWith("Node[") && line.endsWith("]")) {
-                    Blackboard.getInstance().getNodes().add(Node.fromString(line));
-                }
-                if (line.startsWith("ClassRelationship[") && line.endsWith("]")) {
-                    Blackboard.getInstance().getClassRelationships().add(ClassRelationship.fromString(line));
-                }
-                if (line.startsWith("Connection[") && line.endsWith("]")) {
-                    Blackboard.getInstance().getConnections().add(Connection.fromString(line));
+                    Node node = Node.fromString(line);
+                    nodeMap.put(node.getLabel(), node);
+                    Blackboard.getInstance().add(node);
                 }
             }
         }
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("ClassRelationship[") && line.endsWith("]")) {
+                    ClassRelationship relationship = ClassRelationship.fromString(line);
+                    Node fromNode = nodeMap.get(relationship.getFromNode().getLabel());
+                    Node toNode = nodeMap.get(relationship.getToNode().getLabel());
+                    if (fromNode != null && toNode != null) {
+                        ClassRelationship newRelationship = new ClassRelationship(
+                                fromNode, toNode, relationship.getRelationshipType());
+                        Blackboard.getInstance().addClassRelationship(newRelationship);
+                    }
+                }
+                if (line.startsWith("Connection[") && line.endsWith("]")) {
+                    Connection connection = Connection.fromString(line);
+                    Node fromNode = nodeMap.get(connection.getFromNode().getLabel());
+                    Node toNode = nodeMap.get(connection.getToNode().getLabel());
+                    if (fromNode != null && toNode != null) {
+                        Connection newConnection = new Connection(
+                                fromNode, connection.getFromDecoration(),
+                                toNode, connection.getToDecoration());
+                        Blackboard.getInstance().addConnection(newConnection);
+                    }
+                }
+            }
+        }
+        Blackboard.getInstance().repaint();
         return contentBuilder.toString();
     }
+
     public void handleSave() {
         updateFile();
         File fileToSave = Blackboard.getInstance().getFile();
@@ -68,6 +97,7 @@ public class FileManager {
             handleSaveAs();
         }
     }
+
     public void handleSaveAs() {
         updateFile();
         String fileContent = Blackboard.getInstance().getFileContent();
@@ -96,6 +126,7 @@ public class FileManager {
             }
         }
     }
+
     private void updateFile() {
         StringBuilder diagramContent = new StringBuilder();
         diagramContent.append("<svg\n");
