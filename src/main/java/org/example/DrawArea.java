@@ -6,6 +6,14 @@ import java.awt.geom.QuadCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * Represents the main drawing area/canvas of the UML editor.
+ * Handles the drawing of nodes, connections, and relationships.
+ * Implements PropertyChangeListener to update the display when the model changes.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class DrawArea extends JPanel implements PropertyChangeListener {
     private DrawAreaListener drawAreaListener;
 
@@ -88,7 +96,6 @@ public class DrawArea extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //repaint();
         switch (evt.getPropertyName()) {
             case "NODES":
             case "CONNECTIONS":

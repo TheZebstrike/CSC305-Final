@@ -1,5 +1,13 @@
 package org.example;
 
+/**
+ * Represents a connection between decorations/patterns in the UML diagram.
+ * Manages the visual/logical connections between node decorations with
+ * specific start and end points and decorations.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class Connection {
     private final Node FROM_NODE;
     private final String FROM_DECORATION;

@@ -2,6 +2,14 @@ package org.example;
 
 import javax.swing.*;
 
+/**
+ * Main driver class for the UML diagram editor.
+ * Sets up the main window, menu bar, and initializes all necessary components.
+ * Extends JFrame to provide the main application window.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class Main extends JFrame {
     private final CodeTab codeTab = new CodeTab();
 

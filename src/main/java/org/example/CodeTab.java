@@ -5,13 +5,20 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
+/**
+ * Represents the code generation tab in the UML editor interface.
+ * Provides a split pane view with a list of classes and their generated code.
+ * Implements PropertyChangeListener to update when the diagram changes.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class CodeTab implements PropertyChangeListener {
     private final JSplitPane SPLIT_PANE;
     private final JTextArea CODE_TEXT_AREA;
     private final DefaultListModel<String> CLASS_LIST_MODEL;
     private final JList<String> CLASS_LIST;
     private Map<String, String> generatedCodeMap;
-
 
     public CodeTab() {
         SPLIT_PANE = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);

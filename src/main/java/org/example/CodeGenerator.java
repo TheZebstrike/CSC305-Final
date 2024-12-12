@@ -2,6 +2,15 @@ package org.example;
 
 import java.util.*;
 
+/**
+ * Generates Java source code from UML diagram elements.
+ * Converts the visual UML diagram representation
+ * into class definitions, using proper implementation of
+ * design patterns, standard solutions, relationships, and class structures.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class CodeGenerator {
     public Map<String, String> generateCode() {
         Map<String, String> codeMap = new HashMap<>();

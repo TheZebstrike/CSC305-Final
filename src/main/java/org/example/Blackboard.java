@@ -4,6 +4,14 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * A singleton class that serves as a central data store and event scheduler for the UML diagram editor.
+ * Implements the Blackboard architectural pattern to manage nodes, connections, and class relationships.
+ * Extends PropertyChangeSupport to provide observer pattern functionality.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class Blackboard extends PropertyChangeSupport {
     private static Blackboard instance;
     private final ArrayList<Node> NODES = new ArrayList<>();

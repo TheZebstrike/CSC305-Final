@@ -6,6 +6,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+/**
+ * Handles mouse controls and user interactions in the draw area.
+ * Manages creating nodes, creating connections, creating relationships, and mouse movement.
+ * Implements both MouseListener and MouseMotionListener interfaces.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class DrawAreaListener implements MouseListener, MouseMotionListener {
     private int offsetX, offsetY;
     private Node selectedNode = null;
@@ -192,6 +200,7 @@ public class DrawAreaListener implements MouseListener, MouseMotionListener {
             }
         }
     }
+
     public void setSelectedRelationshipType(String type) {
         selectedRelationshipType = type;
         relationshipStartNode = null;

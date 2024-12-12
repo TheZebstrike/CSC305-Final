@@ -5,6 +5,14 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages file operations for the UML editor.
+ * Handles saving and loading diagram files, including
+ * their connections and relationships.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class FileManager {
     private final JFrame FRAME;
 

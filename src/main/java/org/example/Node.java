@@ -7,6 +7,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
+/**
+ * Represents a class node in the UML diagram.
+ * Manages the visual representation and properties of a class box,
+ * including its label, position, size, and decorations.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class Node {
     private final Rectangle BOUNDS;
     private String label;

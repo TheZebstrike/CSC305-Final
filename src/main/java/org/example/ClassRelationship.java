@@ -1,5 +1,12 @@
 package org.example;
 
+/**
+ * Represents a relationship between two classes in the UML diagram.
+ * Manages the connection between nodes with specific relationship types.
+ *
+ * @author Yud Wong, Aidan Stutz
+ */
+
 public class ClassRelationship {
     private final Node FROM_NODE;
     private final Node TO_NODE;
